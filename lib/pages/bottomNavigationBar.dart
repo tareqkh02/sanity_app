@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-Widget bottomNavigationBar() {
+import 'package:safe_chat/pages/search_page.dart';
+
+Widget bottomNavigationBar(BuildContext context) {
   return Row(
     children: [
       Padding(
         padding: const EdgeInsets.all(20.0),
         child: Container(
           height: 40,
-          width: 90,
+          width: 300,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
             border: Border.all(
@@ -30,7 +32,7 @@ Widget bottomNavigationBar() {
                   ),
                 ),
                 SizedBox(
-                  width: 20,
+                  width: 10,
                 ),
                 GestureDetector(
                   onTap: () {},
@@ -43,28 +45,27 @@ Widget bottomNavigationBar() {
                     ),
                   ),
                 ),
+                SizedBox(
+                  width: 10,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SearchPage()),
+                    );
+                  },
+                  child: CircleAvatar(
+                    maxRadius: 15,
+                    child: SvgPicture.asset(
+                      'assets/search-alt-1-svgrepo-com.svg',
+                      height: 20,
+                      width: 20,
+                    ),
+                  ),
+                ),
               ],
             ),
-          ),
-        ),
-      ),
-      SizedBox(
-        width: 160,
-      ),
-      Container(
-        height: 35,
-        width: 50,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            border: Border.all(color: Colors.black),
-            color: Colors.black),
-        child: CircleAvatar(
-          backgroundColor: Colors.black,
-          child: SvgPicture.asset(
-            'assets/search-alt-1-svgrepo-com.svg',
-            color: Colors.white,
-            height: 20,
-            width: 20,
           ),
         ),
       ),

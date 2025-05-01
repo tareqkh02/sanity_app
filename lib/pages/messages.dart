@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class MessageItem extends StatelessWidget {
   final String name;
-  final String message;
+  final String? message;
+  final String? email;
   final String time;
   final String photoUrl;
   final VoidCallback? onTap;
@@ -10,7 +11,8 @@ class MessageItem extends StatelessWidget {
   const MessageItem({
     Key? key,
     required this.name,
-    required this.message,
+    this.message,
+    this.email,
     required this.time,
     required this.photoUrl,
     this.onTap,
@@ -18,6 +20,8 @@ class MessageItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final subtitle = message ?? email ?? ''; // Pick one
+
     return InkWell(
       onTap: onTap,
       child: Padding(
@@ -27,6 +31,7 @@ class MessageItem extends StatelessWidget {
             CircleAvatar(
               radius: 28,
               backgroundImage: AssetImage(photoUrl),
+              onBackgroundImageError: (_, __) => const Icon(Icons.error),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -38,7 +43,7 @@ class MessageItem extends StatelessWidget {
                           fontWeight: FontWeight.bold, fontSize: 16)),
                   const SizedBox(height: 4),
                   Text(
-                    message,
+                    subtitle,
                     style: const TextStyle(color: Colors.grey),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
