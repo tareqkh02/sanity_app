@@ -4,6 +4,7 @@ class MessageItem extends StatelessWidget {
   final String name;
   final String? message;
   final String? email;
+  final String? id;
   final String time;
   final String photoUrl;
   final VoidCallback? onTap;
@@ -13,6 +14,7 @@ class MessageItem extends StatelessWidget {
     required this.name,
     this.message,
     this.email,
+    this.id,
     required this.time,
     required this.photoUrl,
     this.onTap,
@@ -20,7 +22,7 @@ class MessageItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final subtitle = message ?? email ?? ''; // Pick one
+    final subtitle = message ?? email ?? ''; 
 
     return InkWell(
       onTap: onTap,

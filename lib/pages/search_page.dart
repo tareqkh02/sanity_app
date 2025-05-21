@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:safe_chat/Apis/Apis.dart';
 import 'package:safe_chat/pages/messages.dart';
 import 'package:safe_chat/pages/widget/hendel_messages.dart';
 
@@ -6,8 +7,22 @@ class User {
   final String name;
   final String email;
   final String photoUrl;
+  final String id ;
 
-  User({required this.name, required this.email, required this.photoUrl});
+  User({
+    required this.name,
+    required this.email,
+    required this.id,
+    this.photoUrl = 'assets/default_avatar.png',
+  });
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      name: json['name'],
+      email: json['email'],
+      id: json['id']
+    );
+  }
 }
 
 class SearchPage extends StatefulWidget {
@@ -16,58 +31,43 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  List<User> allUsers = [
-    User(
-      name: 'Tareq kh ',
-      email: 'Tareq@example.com',
-      photoUrl: 'assets/tarq.jpg',
-    ),
-    User(
-      name: 'Tareq kh ',
-      email: 'Tareq@example.com',
-      photoUrl: 'assets/tarq.jpg',
-    ),
-    User(
-      name: 'Tareq kh ',
-      email: 'Tareq@example.com',
-      photoUrl: 'assets/tarq.jpg',
-    ),
-    User(
-      name: 'Tareq kh ',
-      email: 'Tareq@example.com',
-      photoUrl: 'assets/tarq.jpg',
-    ),
-    // Add more users as needed
-  ];
-
   List<User> filteredUsers = [];
 
   @override
   void initState() {
     super.initState();
-    filteredUsers = allUsers;
+    filteredUsers = [];
   }
 
-  void _filterUsers(String query) {
-    final users = allUsers.where((user) {
-      return user.name.toLowerCase().contains(query.toLowerCase()) ||
-          user.email.toLowerCase().contains(query.toLowerCase());
-    }).toList();
+  void _filterUsers(String query) async {
+    if (query.isEmpty) {
+      setState(() => filteredUsers = []);
+      return;
+    }
 
-    setState(() {
-      filteredUsers = users;
-    });
+    try {
+      final results = await searchUsers(query, context);
+      final users = results.map((data) => User.fromJson(data)).toList();
+
+      setState(() {
+        filteredUsers = users;
+      });
+    } catch (e) {
+      print("Search failed: $e");
+      setState(() => filteredUsers = []);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          centerTitle: true,
-          title: Text(
-            'Select Members',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          )),
+        centerTitle: true,
+        title: Text(
+          'Select Members',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+      ),
       body: Column(
         children: [
           Padding(
@@ -96,11 +96,13 @@ class _SearchPageState extends State<SearchPage> {
               itemBuilder: (context, index) {
                 final user = filteredUsers[index];
                 return MessageItem(
+                  id: user.id,
                   name: user.name,
                   email: user.email,
                   time: 'Online',
                   photoUrl: user.photoUrl,
                   onTap: () => handleMessageTap(context, {
+                    'id':user.id,
                     'name': user.name,
                     'photoUrl': user.photoUrl,
                   }),

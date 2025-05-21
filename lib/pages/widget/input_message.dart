@@ -21,9 +21,6 @@ class _BuildMessageInputState extends State<BuildMessageInput> {
       setState(() {
         _isTyping = false;
       });
-
-      await Future.delayed(const Duration(milliseconds: 500));
-      widget.onSendMessage("This is a bot reply.");
     }
   }
 
