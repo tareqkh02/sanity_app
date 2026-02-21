@@ -43,7 +43,7 @@ Sanity Chat is a secure, real-time messaging application designed to prioritize 
 
 1. **Clone the repository:**
 ```bash
-git clone https://github.com/yourusername/sanity-chat.git
+git clone https://github.com/tareqkh02/sanity-chat.git
 cd sanity-chat
 flutter pub get
 flutter run
