@@ -1,11 +1,16 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:safe_chat/class/AuthProvider.dart';
-import 'package:safe_chat/logIn/loginPage.dart';
+import 'package:safe_chat/confing/routes/app_routes.dart';
+import 'package:safe_chat/confing/them/app_them.dart';
 import 'package:provider/provider.dart';
-import 'package:safe_chat/services/ChangeNotifierProvider%20.dart';
-import 'package:safe_chat/services/socket_service.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(
     ChangeNotifierProvider(
       create: (context) => AuthProvider(),
@@ -22,42 +27,17 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  bool isDarkMode = false;
-
-  void toggleTheme() {
-    setState(() {
-      isDarkMode = !isDarkMode;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-
-      return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Safe Chat',
-        themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
-        darkTheme: ThemeData(
-          brightness: Brightness.dark,
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.deepPurple,
-            brightness: Brightness.dark,
-          ),
-          useMaterial3: true,
-        ),
-        home: LoginScreen(
-          isDarkMode: isDarkMode,
-          toggleTheme: toggleTheme,
-        ),
-      );
-    }
-
-
-   
-   
+    return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      title: 'Safe Chat',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      darkTheme: AppThem.lightTheme,
+      routerConfig: appRouter,
+    );
   }
-
+}

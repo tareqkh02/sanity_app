@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:safe_chat/Apis/Apis.dart';
 import 'package:safe_chat/pages/homePage.dart';
 
-import 'sing_in/registerPage.dart';
+import 'registerPage.dart';
 
 class LoginScreen extends StatefulWidget {
   final bool isDarkMode;

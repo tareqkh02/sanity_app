@@ -30,7 +30,7 @@ class SocketService {
 
     _socket!.on('refresh-list', (data) {
       if (data['refreshList'] == true) {
-        print('🔄 Chat list refresh requested');
+        print('Chat list refresh requested');
       }
     });
     return _socket!;

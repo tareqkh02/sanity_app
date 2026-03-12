@@ -1,7 +1,5 @@
-
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart';
-import '../services/socket_service.dart';
 
 class SocketProvider extends InheritedWidget {
   final Socket socket;
@@ -22,5 +20,6 @@ class SocketProvider extends InheritedWidget {
   }
 
   @override
-  bool updateShouldNotify(SocketProvider oldWidget) => socket != oldWidget.socket;
+  bool updateShouldNotify(SocketProvider oldWidget) =>
+      socket != oldWidget.socket;
 }
