@@ -1,9 +1,9 @@
-import 'dart:convert';
+/* import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-import 'package:safe_chat/class/AuthProvider.dart';
+
 
 Future<Map<String, dynamic>> signUpUser(String email, String password,
     String name, bool recall, BuildContext context) async {
@@ -364,3 +364,4 @@ Future<String?> decryptText(context, String aesText) async {
     return null;
   }
 }
+ */

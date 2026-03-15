@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+/* import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:safe_chat/Apis/Apis.dart';
-import 'package:safe_chat/class/AuthProvider.dart';
+
 import 'package:safe_chat/pages/widget/input_message.dart';
 import 'package:safe_chat/services/socket_service.dart';
 
@@ -274,3 +274,4 @@ class _ConversationPageState extends State<ConversationPage> {
     );
   }
 }
+ */

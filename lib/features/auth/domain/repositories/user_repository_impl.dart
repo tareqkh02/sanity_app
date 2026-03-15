@@ -14,6 +14,13 @@ class UserRepositoryImpl implements UserRepository {
         uid: userCredential.user!.uid, email: userCredential.user!.email);
   }
 
+    @override
+  Future<UserEntit> signUp(String email, String password) {
+   final userCredential = remoteDataSource.signUp(email, password);
+    return userCredential.then((credential) => UserEntit(
+        uid: credential.user!.uid, email: credential.user!.email));
+  }
+
   @override
   Future<String?> getUserEmail() {
     // TODO: implement getUserEmail
@@ -32,9 +39,5 @@ class UserRepositoryImpl implements UserRepository {
     throw UnimplementedError();
   }
 
-  @override
-  Future<UserEntit> signUp(String email, String password) {
-    // TODO: implement signUp
-    throw UnimplementedError();
-  }
+
 }

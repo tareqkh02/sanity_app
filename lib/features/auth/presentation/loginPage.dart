@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:safe_chat/Apis/Apis.dart';
+import 'package:safe_chat/confing/routes/app_routes.dart';
+import 'package:safe_chat/features/auth/presentation/logic/cubit/user_auth_cubit.dart';
+import 'package:safe_chat/features/auth/presentation/widget/buildButton.dart';
+import 'package:safe_chat/features/auth/presentation/widget/buildSocialButton.dart';
 import 'package:safe_chat/pages/homePage.dart';
 
 import 'registerPage.dart';
@@ -24,9 +30,14 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController passwordController = TextEditingController();
   String _errorMessage = '';
 
+  void signInWithGoogle() async {
+    //
+  }
+
   void handleLogin() async {
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
+
     if (email.isEmpty || password.isEmpty) {
       setState(() {
         _errorMessage = 'Please enter both email and password.';
@@ -34,88 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    print("Logging in with: $email");
-
-    final result = await signInUser(email, password, true, context);
-
-    if (result != null && result['success'] == true) {
-      print('✅ Login successful');
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-      );
-    } else {
-      setState(() {
-        _errorMessage =
-            result?['message'] ?? 'Invalid credentials, please try again.';
-      });
-    }
-  }
-
-  Future<void> login(BuildContext context) async {
-    final email = emailController.text;
-    final password = passwordController.text;
-
-    // login api
-  }
-
-  Future<void> signInWithGoogle() async {
-    // sign with google api
-  }
-
-  Widget buildButton(String text, VoidCallback onPressed) {
-    final isDark = widget.isDarkMode;
-    final buttonColor = isDark ? Colors.white : Colors.black;
-    final textColor = isDark ? Colors.black : Colors.white;
-
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: buttonColor,
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
-          ),
-        ),
-        child: Text(
-          text,
-          style: TextStyle(color: textColor),
-        ),
-      ),
-    );
-  }
-
-  Widget buildSocialButton({
-    required IconData icon,
-    required String text,
-    required ThemeData theme,
-    required VoidCallback action,
-  }) {
-    final isDark = widget.isDarkMode;
-    final buttonColor = isDark ? Colors.white : Colors.black;
-
-    return SizedBox(
-      width: double.infinity,
-      child: OutlinedButton.icon(
-        onPressed: action,
-        icon: Icon(icon, color: buttonColor),
-        label: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 14.0),
-          child: Text(
-            text,
-            style: TextStyle(color: buttonColor),
-          ),
-        ),
-        style: OutlinedButton.styleFrom(
-          side: BorderSide(color: buttonColor),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
-          ),
-        ),
-      ),
-    );
+    context.read<UserAuthCubit>().singin(email, password);
   }
 
   @override
@@ -125,8 +55,19 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
-      body: SafeArea(
-        child: SingleChildScrollView(
+      body: BlocConsumer<UserAuthCubit, UserAuthState>(
+          listener: (context, state) {
+        if (state is UserAuthSuccess) {
+          context.go(Routes.home);
+        }
+        if (state is UserAuthFailure) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content: Text(state.errorMessage), backgroundColor: Colors.red),
+          );
+        }
+      }, builder: (context, state) {
+        return SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -201,7 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         color: Color.fromARGB(255, 96, 96, 96),
                       )),
                   style: const TextStyle(
-                      color: Colors.black,
+                      color: Colors.white,
                       fontFamily: "Avenir",
                       fontWeight: FontWeight.normal,
                       fontSize: 14),
@@ -323,8 +264,8 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 30),
             ],
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 }

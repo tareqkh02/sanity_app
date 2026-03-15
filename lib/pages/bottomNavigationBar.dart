@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/* import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:safe_chat/pages/search_page.dart';
 
@@ -72,3 +72,4 @@ Widget bottomNavigationBar(BuildContext context) {
     ],
   );
 }
+ */

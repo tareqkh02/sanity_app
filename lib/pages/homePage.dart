@@ -20,14 +20,13 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    getUserId(context);
-    getUserId(context);
+   
     _fetchMessages();
   }
 
   Future<void> _fetchMessages() async {
     try {
-      final List<dynamic> data = await getAllChats(context);
+     /* 
 
       final List<Map<String, String>> formatted =
           data.map<Map<String, String>>((chat) {
@@ -71,7 +70,7 @@ class _HomePageState extends State<HomePage> {
 
       setState(() {
         _messages = formatted;
-      });
+      }); */
     } catch (e) {
       print('Error fetching messages: $e');
     }
@@ -121,10 +120,10 @@ class _HomePageState extends State<HomePage> {
                   _searchTabTappedOnce = false;
 
                   Future.delayed(Duration(milliseconds: 200), () {
-                    Navigator.push(
+/*                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => SearchPage()),
-                    );
+                    ); */
                   });
                 } else {
                   _searchTabTappedOnce = true;
@@ -197,7 +196,7 @@ class _HomePageState extends State<HomePage> {
                     message: msg['message']!,
                     time: msg['time']!,
                     photoUrl: msg['photoUrl']!,
-                    onTap: () => handleMessageTap(context, msg),
+       /*              onTap: () => handleMessageTap(context, msg), */
                   );
                 },
               ),

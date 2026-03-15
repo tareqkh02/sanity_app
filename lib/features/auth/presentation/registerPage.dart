@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:safe_chat/Apis/Apis.dart';
-import 'package:safe_chat/pages/homePage.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:safe_chat/confing/routes/app_routes.dart';
+import 'package:safe_chat/features/auth/presentation/logic/cubit/user_auth_cubit.dart';
 
 class RegisterScreen extends StatefulWidget {
   final bool isDarkMode;
@@ -32,6 +34,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
     final name = _nameController.text.trim();
+
     if (email.isEmpty || password.isEmpty) {
       setState(() {
         _errorMessage = 'Please enter both email and password.';
@@ -39,22 +42,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       return;
     }
 
-    print("Logging in with: $email");
-
-    final result = await signUpUser(email, password, name, true , context);
-
-    if (result != null && result['success'] == true) {
-      print('✅ Login successful');
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-      );
-    } else {
-      setState(() {
-        _errorMessage =
-            result?['message'] ?? 'Invalid credentials, please try again.';
-      });
-    }
+    context.read<UserAuthCubit>().singin(email, password);
   }
 
   void _evaluatePasswordStrength(String password) {
@@ -118,8 +106,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
-      body: SafeArea(
-        child: SingleChildScrollView(
+      body: BlocConsumer<UserAuthCubit, UserAuthState>(
+          listener: (context, state) {
+        if (state is UserAuthSuccess) {
+          context.go(Routes.home);
+        }
+        if (state is UserAuthFailure) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content: Text(state.errorMessage), backgroundColor: Colors.red),
+          );
+        }
+      }, builder: (context, state) {
+        return SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -194,7 +193,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           color: Color.fromARGB(255, 96, 96, 96),
                         )),
                     style: TextStyle(
-                        color: Colors.black,
+                        color: Colors.white,
                         fontFamily: "Avenir",
                         fontWeight: FontWeight.normal,
                         fontSize: 14),
@@ -233,7 +232,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         color: Color.fromARGB(255, 96, 96, 96),
                       )),
                   style: const TextStyle(
-                      color: Colors.black,
+                      color: Colors.white,
                       fontFamily: "Avenir",
                       fontWeight: FontWeight.normal,
                       fontSize: 14),
@@ -276,7 +275,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         color: Color.fromARGB(255, 96, 96, 96),
                       )),
                   style: const TextStyle(
-                      color: Colors.black,
+                      color: Colors.white,
                       fontFamily: "Avenir",
                       fontWeight: FontWeight.normal,
                       fontSize: 14),
@@ -328,7 +327,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         color: Color.fromARGB(255, 96, 96, 96),
                       )),
                   style: const TextStyle(
-                      color: Colors.black,
+                      color: Colors.white,
                       fontFamily: "Avenir",
                       fontWeight: FontWeight.normal,
                       fontSize: 14),
@@ -373,8 +372,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
             ],
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 }

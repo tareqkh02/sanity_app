@@ -10,10 +10,10 @@ sealed class UserAuthState extends Equatable {
 final class UserAuthInitial extends UserAuthState {}
 final class UserAuthLoading extends UserAuthState {}
 final class UserAuthSuccess extends UserAuthState {
-  final String uid; 
+  final String? uid; 
   const UserAuthSuccess({required this.uid});
   @override
-  List<Object> get props => [uid];
+  List<Object> get props => [uid ?? ''];
 }
 final class UserAuthFailure extends UserAuthState {
   final String errorMessage;
