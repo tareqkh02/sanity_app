@@ -1,11 +1,13 @@
-
-
-import 'package:safe_chat/features/auth/domain/entitis/user_entit.dart';
+import 'package:safe_chat/features/auth/domain/entities/user_entity.dart';
 
 abstract class UserRepository {
-  Future<UserEntit> signIn(String email, String password);
-  Future<UserEntit> signUp(String email, String password);
-  Future<UserEntit> signOut();
+  Future<UserEntity> signIn(String email, String password);
+
+  Future<UserEntity> signUp(String email, String password);
+
+  Future<void> signOut();
+
   Future<bool> isSignedIn();
+
   Future<String?> getUserEmail();
 }
